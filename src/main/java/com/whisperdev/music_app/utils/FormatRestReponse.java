@@ -27,11 +27,10 @@ public class FormatRestReponse implements ResponseBodyAdvice<Object> {
         int status = servletResponse.getStatus();
         RestResponse<Object> restResponse = new RestResponse<>();
         restResponse.setStatus(status);
-        if (body instanceof String ||
-                body instanceof Resource ||
-                body instanceof Collection<?>) {
-            return body;
-        }
+
+       if(!MediaType.APPLICATION_JSON.equals(selectedContentType)){
+           return body;
+       }
         if (status >= 400) {
             return body;
         } else {

@@ -13,9 +13,9 @@ import java.util.Optional;
 
 @Service
 public class FileService {
-    public Optional<Resource> getByName(String name){
+    public Optional<Resource> getByName(String name,String folder){
         try {
-            Path relativePath = Paths.get("uploads").toAbsolutePath().normalize();
+            Path relativePath = Paths.get("uploads"+folder).toAbsolutePath().normalize();
             Path filePath = relativePath.resolve(name).normalize();
             if(!filePath.toFile().exists()){
                 return Optional.empty();

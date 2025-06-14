@@ -18,6 +18,9 @@ public class TrackMapper {
         trackResponse.setCountPlay(track.getCountPlay());
         UserResponse userResponse = UserMapper.toUserResponse(track.getUser());
         trackResponse.setUploader(userResponse);
+        trackResponse.setCreatedAt(track.getCreatedAt());
+        trackResponse.setUpdatedAt(track.getUpdatedAt());
+        trackResponse.setDeleted(track.isDeleted());
         return trackResponse;
     }
 }

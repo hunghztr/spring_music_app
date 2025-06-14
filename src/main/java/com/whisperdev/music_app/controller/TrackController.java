@@ -26,8 +26,8 @@ public class TrackController {
     private TrackService trackService;
 
     @GetMapping("/{name}")
-    public ResponseEntity<Resource> getByName(@PathVariable("name") String name) {
-        Optional<Resource> resourceOpt = this.fileService.getByName(name);
+    public ResponseEntity<?> getMp3ByName(@PathVariable("name") String name) {
+        Optional<Resource> resourceOpt = this.fileService.getByName(name,"/mp3");
         if (resourceOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
         }

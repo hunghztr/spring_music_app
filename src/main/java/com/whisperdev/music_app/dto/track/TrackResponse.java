@@ -3,6 +3,8 @@ package com.whisperdev.music_app.dto.track;
 import com.whisperdev.music_app.dto.user.UserResponse;
 import lombok.Data;
 
+import java.time.Instant;
+
 @Data
 public class TrackResponse {
     private String id;
@@ -14,4 +16,7 @@ public class TrackResponse {
     private int countLike;
     private int countPlay;
     private UserResponse uploader;
+    private Instant createdAt;
+    private Instant updatedAt;
+    private boolean isDeleted;
 }

@@ -15,12 +15,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String name;
-    private String email;
+    private String username;
     private String password;
     private int age;
     private String gender;
     private String address;
     private String role;
+    private String type;
+    private boolean isVerify;
+    @Column(columnDefinition = "TEXT")
+    private String refreshToken;
     private Instant createdAt;
     private Instant updatedAt;
     private boolean isDeleted;
@@ -35,4 +39,5 @@ public class User {
     public void preUpdate() {
         updatedAt = Instant.now();
     }
+
 }

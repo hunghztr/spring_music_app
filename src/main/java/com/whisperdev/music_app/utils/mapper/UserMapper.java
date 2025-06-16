@@ -8,9 +8,11 @@ public class UserMapper {
         UserResponse userResponse = new UserResponse();
         userResponse.setId(user.getId());
         userResponse.setName(user.getName());
-        userResponse.setEmail(user.getEmail());
+        userResponse.setEmail(user.getUsername());
+        userResponse.setUsername(user.getUsername());
         userResponse.setRole(user.getRole());
-        userResponse.setType("SYSTEM");
+        userResponse.setType(user.getType());
+        userResponse.setVerify(user.isVerify());
         return userResponse;
     }
 }

@@ -12,4 +12,5 @@ import lombok.Setter;
 public class TrackRequest {
     private String category;
     private Integer limit;
+
 }

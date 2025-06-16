@@ -1,10 +1,13 @@
 package com.whisperdev.music_app.controller;
 
+import com.whisperdev.music_app.dto.user.LoginResponse;
 import com.whisperdev.music_app.dto.user.ReqLoginDTO;
 import com.whisperdev.music_app.dto.user.ResLoginDTO;
 import com.whisperdev.music_app.model.User;
 import com.whisperdev.music_app.service.UserService;
 import com.whisperdev.music_app.utils.SecurityUtil;
+import com.whisperdev.music_app.utils.mapper.UserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -29,58 +32,44 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1")
 public class AuthController {
 
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final SecurityUtil securityUtil;
-    private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private  AuthenticationManagerBuilder authenticationManagerBuilder;
+    @Autowired
+    private  SecurityUtil securityUtil;
+    @Autowired
+    private  UserService userService;
+    @Autowired
+    private  PasswordEncoder passwordEncoder;
 
     @Value("${whisper.jwt.refresh-token-validity-in-seconds}")
     private long refreshTokenExpiration;
 
-    public AuthController(
-            AuthenticationManagerBuilder authenticationManagerBuilder,
-            SecurityUtil securityUtil,
-            UserService userService,
-            PasswordEncoder passwordEncoder) {
-        this.authenticationManagerBuilder = authenticationManagerBuilder;
-        this.securityUtil = securityUtil;
-        this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
-    }
+
 
     @PostMapping("/auth/login")
-    public ResponseEntity<ResLoginDTO> login( @RequestBody ReqLoginDTO loginDto) {
-        // Nạp input gồm username/password vào Security
+    public ResponseEntity<?> login( @RequestBody User user) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                loginDto.getUsername(), loginDto.getPassword());
+                user.getUsername(), user.getPassword());
 
-        // xác thực người dùng => cần viết hàm loadUserByUsername
         Authentication authentication = authenticationManagerBuilder.getObject()
                 .authenticate(authenticationToken);
 
-        // set thông tin người dùng đăng nhập vào context (có thể sử dụng sau này)
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        ResLoginDTO res = new ResLoginDTO();
-        User currentUserDB = this.userService.fetchUserByUsername(loginDto.getUsername());
-        if (currentUserDB != null) {
-            ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin(
-                    currentUserDB.getId(),
-                    currentUserDB.getUsername(),
-                    currentUserDB.getName(),
-                    currentUserDB.getRole());
-            res.setUser(userLogin);
+        LoginResponse response = new LoginResponse();
+        User currentUserDB = this.userService.fetchUserByUsername(user.getUsername());
+        if(currentUserDB != null) {
+            response.setUser(UserMapper.toUserResponse(currentUserDB));
         }
 
         // create access token
-        String access_token = this.securityUtil.createAccessToken(authentication.getName(), res);
-        res.setAccessToken(access_token);
+        String access_token = this.securityUtil.generateToken(currentUserDB,"access_token");
+        response.setAccessToken(access_token);
 
         // create refresh token
-        String refresh_token = this.securityUtil.createRefreshToken(loginDto.getUsername(), res);
-
+        String refresh_token = this.securityUtil.generateToken(currentUserDB,"refresh_token");
+        response.setRefreshToken(refresh_token);
         // update user
-        this.userService.updateUserToken(refresh_token, loginDto.getUsername());
+        this.userService.updateUserToken(refresh_token, user.getUsername());
 
         // set cookies
         ResponseCookie resCookies = ResponseCookie
@@ -93,7 +82,7 @@ public class AuthController {
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, resCookies.toString())
-                .body(res);
+                .body(response);
     }
 
 //    @GetMapping("/auth/account")

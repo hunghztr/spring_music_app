@@ -41,7 +41,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
                                                    CustomAuthenticationEntryPoint point) throws Exception {
@@ -61,8 +61,8 @@ public class SecurityConfig {
 
         return http.build();
     }
-
-    private SecretKey getSecretKey() {
+    @Bean
+    public SecretKey getSecretKey() {
         byte[] keyBytes = com.nimbusds.jose.util.Base64.from(jwtKey).decode();
         return new SecretKeySpec(keyBytes, 0, keyBytes.length,
                 SecurityUtil.JWT_ALGORITHM.getName());

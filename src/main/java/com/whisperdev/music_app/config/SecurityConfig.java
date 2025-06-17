@@ -35,7 +35,7 @@ import java.util.Base64;
 public class SecurityConfig {
     @Value("${whisper.jwt.base64-secret}")
     private String jwtKey;
-    @Autowired private UserService userService;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -50,7 +50,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/api/v1/auth/login").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
 
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults())

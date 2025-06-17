@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
 
     @Autowired
@@ -44,9 +44,7 @@ public class AuthController {
     @Value("${whisper.jwt.refresh-token-validity-in-seconds}")
     private long refreshTokenExpiration;
 
-
-
-    @PostMapping("/auth/login")
+    @PostMapping("/login")
     public ResponseEntity<?> login( @RequestBody User user) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 user.getUsername(), user.getPassword());
@@ -55,25 +53,10 @@ public class AuthController {
                 .authenticate(authenticationToken);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        LoginResponse response = new LoginResponse();
-        User currentUserDB = this.userService.fetchUserByUsername(user.getUsername());
-        if(currentUserDB != null) {
-            response.setUser(UserMapper.toUserResponse(currentUserDB));
-        }
-
-        // create access token
-        String access_token = this.securityUtil.generateToken(currentUserDB,"access_token");
-        response.setAccessToken(access_token);
-
-        // create refresh token
-        String refresh_token = this.securityUtil.generateToken(currentUserDB,"refresh_token");
-        response.setRefreshToken(refresh_token);
-        // update user
-        this.userService.updateUserToken(refresh_token, user.getUsername());
-
+        LoginResponse loginResponse = userService.getLoginResponse(user.getUsername());
         // set cookies
         ResponseCookie resCookies = ResponseCookie
-                .from("refresh_token", refresh_token)
+                .from("refresh_token", loginResponse.getRefreshToken())
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
@@ -82,9 +65,25 @@ public class AuthController {
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, resCookies.toString())
-                .body(response);
+                .body(loginResponse);
     }
 
+    @PostMapping("/social-media")
+    public ResponseEntity<?> socialMedia( @RequestBody User user) {
+        if(userService.isExistByUsername(user.getUsername())) {
+            User getUser = userService.fetchUserByUsername(user.getUsername());
+            getUser.setType(user.getType());
+            getUser.setVerify(true);
+            userService.save(getUser);
+        }else{
+            user.setRole("USER");
+            user.setVerify(true);
+            userService.save(user);
+        }
+        LoginResponse loginResponse = userService.getLoginResponse(user.getUsername());
+
+        return ResponseEntity.ok().body(loginResponse);
+    }
 //    @GetMapping("/auth/account")
 //    @ApiMessage("fetch account")
 //    public ResponseEntity<ResLoginDTO.UserGetAccount> getAccount() {

@@ -15,6 +15,7 @@ public class TrackResponse {
     private String trackUrl;
     private int countLike;
     private int countPlay;
+    private int countDislike;
     private UserResponse uploader;
     private Instant createdAt;
     private Instant updatedAt;

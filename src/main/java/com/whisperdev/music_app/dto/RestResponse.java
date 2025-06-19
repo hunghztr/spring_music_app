@@ -7,7 +7,7 @@ import lombok.Data;
 
 public class RestResponse<T> {
     private int status;
-    private String message;
+    private Object message;
     private T data;
 
 

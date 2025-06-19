@@ -1,7 +1,7 @@
 package com.whisperdev.music_app.repository;
 
+import com.whisperdev.music_app.model.Comment;
 import com.whisperdev.music_app.model.Track;
-import com.whisperdev.music_app.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,8 +9,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TrackRepository extends JpaRepository<Track, String>, JpaSpecificationExecutor<Track> {
-    Page<Track> findAllByCategory(String category,Pageable pageable);
-    void deleteById(String id);
-    Page<Track> findByUser(User user, Pageable pageable);
+public interface CommentRepository extends JpaRepository<Comment, String>, JpaSpecificationExecutor<Comment> {
+    Page<Comment> getByTrack(Track track, Pageable pageable);
 }

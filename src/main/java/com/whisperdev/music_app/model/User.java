@@ -31,6 +31,14 @@ public class User {
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Track> tracks;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Like> likes;
+
     @PrePersist
     public void prePersist() {
         createdAt = Instant.now();

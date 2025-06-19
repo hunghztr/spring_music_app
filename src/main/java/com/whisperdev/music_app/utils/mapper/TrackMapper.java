@@ -16,6 +16,7 @@ public class TrackMapper {
         trackResponse.setTrackUrl(track.getTrackUrl());
         trackResponse.setCountLike(track.getCountLike());
         trackResponse.setCountPlay(track.getCountPlay());
+        trackResponse.setCountDislike(track.getCountDislike());
         UserResponse userResponse = UserMapper.toUserResponse(track.getUser());
         trackResponse.setUploader(userResponse);
         trackResponse.setCreatedAt(track.getCreatedAt());

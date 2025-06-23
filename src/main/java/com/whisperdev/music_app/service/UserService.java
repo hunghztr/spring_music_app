@@ -6,7 +6,6 @@ import com.whisperdev.music_app.repository.UserRepository;
 import com.whisperdev.music_app.utils.SecurityUtil;
 import com.whisperdev.music_app.utils.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -60,5 +59,9 @@ public class UserService {
         // update user
         this.updateUserToken(refreshToken, currentUserDB.getUsername());
         return  response;
+    }
+
+    public User getUserByRefreshTokenAndEmail(String token, String email) {
+        return this.userRepository.findByRefreshTokenAndUsername(token, email);
     }
 }

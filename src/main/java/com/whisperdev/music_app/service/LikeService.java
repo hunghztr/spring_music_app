@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,12 +23,12 @@ public class LikeService {
     @Autowired private LikeReposittory likeReposittory;
     @Autowired private TrackRepository trackRepository;
     @Autowired private UserRepository userRepository;
-    public List<TrackResponse> getTrackByUserLike(Integer current, Integer pageSize) {
-        Pageable pageable = PageRequest.of(current-1, pageSize);
+    public List<TrackResponse> getTrackByUserLike() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByUsername(username);
         List<Like> likes = likeReposittory.findByUser(user);
         List<Track> tracks = likes.stream().map(i -> i.getTrack()).toList();
+        if(tracks.isEmpty()) return new ArrayList<>();
         List<TrackResponse> trackResponses = tracks.stream()
                 .map(i -> TrackMapper.toTrackResponse(i)).toList();
         return trackResponses;

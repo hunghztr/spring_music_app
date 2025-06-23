@@ -2,6 +2,7 @@ package com.whisperdev.music_app.utils;
 
 import com.whisperdev.music_app.dto.user.UserToken;
 import com.whisperdev.music_app.model.User;
+import com.whisperdev.music_app.utils.exception.InvalidException;
 import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -9,6 +10,8 @@ import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
 
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
@@ -77,5 +80,18 @@ public class SecurityUtil {
 
 
     }
-
+    public SecretKey getSecretKey() {
+        byte[] keyBytes = com.nimbusds.jose.util.Base64.from(jwtKey).decode();
+        return new SecretKeySpec(keyBytes, 0, keyBytes.length,
+                SecurityUtil.JWT_ALGORITHM.getName());
+    }
+    public Jwt checkValidRefreshToken(String token) throws InvalidException {
+        NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withSecretKey(
+                getSecretKey()).macAlgorithm(SecurityUtil.JWT_ALGORITHM).build();
+        try {
+            return jwtDecoder.decode(token);
+        } catch (Exception e) {
+            throw new InvalidException("Refresh token không hợp lệ");
+        }
+    }
 }

@@ -61,7 +61,7 @@ public class SecurityConfig {
 
         return http.build();
     }
-    @Bean
+
     public SecretKey getSecretKey() {
         byte[] keyBytes = com.nimbusds.jose.util.Base64.from(jwtKey).decode();
         return new SecretKeySpec(keyBytes, 0, keyBytes.length,

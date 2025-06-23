@@ -71,4 +71,24 @@ public class TrackService {
         }
         return null;
     }
+
+    public PageResponse<TrackResponse> getBySearch(String search, Integer current, Integer pageSize) {
+        Pageable pageable = PageRequest.of(current-1,pageSize);
+        Page<Track> trackPage = trackRepository
+                .findByTitleContainingIgnoreCaseOrCategoryContainingIgnoreCase(search,search,pageable);
+        PageResponse<TrackResponse> pageResponse = new PageResponse<>();
+        MetaResponse meta = new MetaResponse();
+
+        meta.setCurrent(pageable.getPageNumber()+1);
+        meta.setPageSize(pageable.getPageSize());
+
+        meta.setPages(trackPage.getTotalPages());
+
+        meta.setTotal(trackPage.getTotalElements());
+
+        pageResponse.setMeta(meta);
+        List<TrackResponse> trackResponses = trackPage.getContent().stream().map(TrackMapper::toTrackResponse).toList();
+        pageResponse.setResult(trackResponses);
+        return pageResponse;
+    }
 }

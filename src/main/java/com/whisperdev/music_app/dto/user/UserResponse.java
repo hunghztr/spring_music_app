@@ -10,6 +10,7 @@ public class UserResponse {
     private String name;
     private String role;
     private String type;
+    private String avatar;
     private boolean isVerify;
 
 }

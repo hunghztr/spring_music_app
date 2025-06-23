@@ -13,4 +13,5 @@ public interface TrackRepository extends JpaRepository<Track, String>, JpaSpecif
     Page<Track> findAllByCategory(String category,Pageable pageable);
     void deleteById(String id);
     Page<Track> findByUser(User user, Pageable pageable);
+    Page<Track> findByTitleContainingIgnoreCaseOrCategoryContainingIgnoreCase(String title, String category, Pageable pageable);
 }

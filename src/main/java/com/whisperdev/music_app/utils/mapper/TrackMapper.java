@@ -8,6 +8,9 @@ import com.whisperdev.music_app.model.User;
 public class TrackMapper {
     public static TrackResponse toTrackResponse(Track track) {
         TrackResponse trackResponse = new TrackResponse();
+        if(track == null){
+            return trackResponse;
+        }
         trackResponse.setId(track.getId());
         trackResponse.setTitle(track.getTitle());
         trackResponse.setDescription(track.getDescription());

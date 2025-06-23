@@ -24,7 +24,7 @@ public class LikeController {
             @RequestParam(name = "current",defaultValue = "1") Integer current,
             @RequestParam(name = "pageSize",defaultValue = "10") Integer pageSize
     ){
-        List<TrackResponse> responses = this.likeService.getTrackByUserLike(current,pageSize);
+        List<TrackResponse> responses = this.likeService.getTrackByUserLike();
         return ResponseEntity.ok(responses);
     }
     @PostMapping

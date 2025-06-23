@@ -18,6 +18,18 @@ import java.util.Optional;
 @RequestMapping("/api/v1")
 public class FileController {
     @Autowired private FileService fileService;
+    @GetMapping("/images/avatar/{name}")
+    public ResponseEntity<Resource> getAvatar(@PathVariable("name") String name) {
+        Optional<Resource> resourceOpt = this.fileService.getByName(name,"/avatar");
+        if (resourceOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        String encodeFile = fileService.encodeFilenameRFC5987(resourceOpt.get().getFilename());
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_PNG)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + encodeFile + "\"")
+                .body(resourceOpt.get());
+    }
     @GetMapping("/images/{name}")
     public ResponseEntity<?> getImgByName(@PathVariable("name") String name) {
         Optional<Resource> resourceOpt = this.fileService.getByName(name,"/img");

@@ -28,6 +28,7 @@ public class User {
     private Instant createdAt;
     private Instant updatedAt;
     private boolean isDeleted;
+    private String avatar;
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Track> tracks;
@@ -38,7 +39,9 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Like> likes;
-
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    List<Playlist> playlists;
     @PrePersist
     public void prePersist() {
         createdAt = Instant.now();

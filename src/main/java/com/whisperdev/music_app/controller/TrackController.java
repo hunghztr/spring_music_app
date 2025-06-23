@@ -29,6 +29,14 @@ public class TrackController {
     @Autowired
     private TrackService trackService;
 
+    @GetMapping("/search")
+    public ResponseEntity<?> search(
+            @RequestParam(name = "search",defaultValue = "undefined") String search,
+            @RequestParam(name = "current",defaultValue = "1") Integer current,
+            @RequestParam(name = "pageSize",defaultValue = "10") Integer pageSize){
+        PageResponse<TrackResponse> response = this.trackService.getBySearch(search,current,pageSize);
+        return ResponseEntity.ok(response);
+    }
     @GetMapping("/get-id/{id}")
     public ResponseEntity<TrackResponse> getTrack(@PathVariable("id") String id) {
         Track track = trackService.getById(id);

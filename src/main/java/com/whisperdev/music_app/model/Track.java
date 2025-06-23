@@ -3,7 +3,6 @@ package com.whisperdev.music_app.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.Instant;
@@ -43,6 +42,9 @@ public class Track {
     @JsonIgnore
     @OneToMany(mappedBy = "track")
     private List<Like> likes;
+    @JsonIgnore
+    @OneToMany(mappedBy = "track")
+    private List<PlaylistDetails> playlistDetails;
     @PrePersist
     public void prePersist() {
         createdAt = Instant.now();

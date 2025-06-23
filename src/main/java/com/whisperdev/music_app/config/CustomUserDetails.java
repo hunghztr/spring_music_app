@@ -28,7 +28,7 @@ public class CustomUserDetails implements UserDetailsService {
             throw new UsernameNotFoundException("badcredencals ...");
         }
 
-        return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(),
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole())));
     }
 

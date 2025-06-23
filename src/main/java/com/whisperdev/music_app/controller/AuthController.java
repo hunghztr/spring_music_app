@@ -7,6 +7,7 @@ import com.whisperdev.music_app.model.User;
 import com.whisperdev.music_app.service.UserService;
 import com.whisperdev.music_app.utils.SecurityUtil;
 import com.whisperdev.music_app.utils.mapper.UserMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -46,12 +48,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login( @RequestBody User user) {
+
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 user.getUsername(), user.getPassword());
 
         Authentication authentication = authenticationManagerBuilder.getObject()
                 .authenticate(authenticationToken);
-
+        log.info(authentication.isAuthenticated()+"");
         SecurityContextHolder.getContext().setAuthentication(authentication);
         LoginResponse loginResponse = userService.getLoginResponse(user.getUsername());
         // set cookies

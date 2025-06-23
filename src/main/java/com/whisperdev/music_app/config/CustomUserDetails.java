@@ -15,11 +15,8 @@ import org.springframework.stereotype.Service;
 @Component
 public class CustomUserDetails implements UserDetailsService {
 
-    private final UserService userService;
+    @Autowired private  UserService userService;
 
-    public CustomUserDetails(UserService userService) {
-        this.userService = userService;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -28,7 +25,7 @@ public class CustomUserDetails implements UserDetailsService {
             throw new UsernameNotFoundException("badcredencals ...");
         }
 
-        return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(),
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole())));
     }
 

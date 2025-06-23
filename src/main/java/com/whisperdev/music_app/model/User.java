@@ -20,7 +20,9 @@ public class User {
     private int age;
     private String gender;
     private String address;
-    private String role;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id")
+    private Role role;
     private String type;
     private boolean isVerify;
     @Column(columnDefinition = "TEXT")

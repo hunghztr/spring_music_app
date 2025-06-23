@@ -42,7 +42,7 @@ public class SecurityUtil {
         userToken.setId(user.getId());
         userToken.setUsername(user.getUsername());
         userToken.setName(user.getName());
-        userToken.setRole(user.getRole());
+        userToken.setRole(user.getRole().getName());
         long expiration = 0;
         if (type.equals("access_token")) {
             expiration = accessTokenExpiration;

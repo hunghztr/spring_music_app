@@ -40,7 +40,10 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
+    private String[] arr = {"/","/api/v1/auth/login","/api/v1/trucks/search","/api/v1/",
+    "/api/v1/likes/increase-view","/api/v1/tracks/top","/api/v1/tracks/user",
+    "/api/v1/tracks/get-id/**","/api/v1/tracks","/api/v1/comments/get-by-track",
+    "/api/v1/playlists","/api/v1/auth/social-media","/api/v1/auth/refresh",};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
@@ -49,7 +52,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/api/v1/auth/login").permitAll()
+                        .requestMatchers("/api/v1/auth/login").permitAll()
                         .anyRequest().permitAll()
                 )
 

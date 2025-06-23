@@ -13,7 +13,7 @@ public class UserMapper {
         userResponse.setName(user.getName());
         userResponse.setEmail(user.getUsername());
         userResponse.setUsername(user.getUsername());
-        userResponse.setRole(user.getRole());
+        userResponse.setRole(user.getRole().getName());
         userResponse.setType(user.getType());
         userResponse.setVerify(user.isVerify());
         userResponse.setAvatar(user.getAvatar());

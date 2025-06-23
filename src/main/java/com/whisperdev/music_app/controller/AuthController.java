@@ -2,7 +2,9 @@ package com.whisperdev.music_app.controller;
 
 import com.whisperdev.music_app.dto.StringResult;
 import com.whisperdev.music_app.dto.user.LoginResponse;
+import com.whisperdev.music_app.model.Role;
 import com.whisperdev.music_app.model.User;
+import com.whisperdev.music_app.service.RoleService;
 import com.whisperdev.music_app.service.UserService;
 import com.whisperdev.music_app.utils.SecurityUtil;
 import com.whisperdev.music_app.utils.exception.InvalidException;
@@ -34,12 +36,14 @@ public class AuthController {
     private  UserService userService;
     @Autowired
     private  PasswordEncoder passwordEncoder;
-
+    @Autowired
+    RoleService roleService;
     @Value("${whisper.jwt.refresh-token-validity-in-seconds}")
     private long refreshTokenExpiration;
 
     @PostMapping("/login")
     public ResponseEntity<?> login( @RequestBody User user) {
+        log.info(user.getUsername()+"=="+user.getPassword());
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 user.getUsername(), user.getPassword());
 
@@ -69,7 +73,8 @@ public class AuthController {
             getUser.setVerify(true);
             userService.save(getUser);
         }else{
-            user.setRole("USER");
+            Role role = roleService.fetchByName("USER");
+            user.setRole(role);
             user.setVerify(true);
             userService.save(user);
         }

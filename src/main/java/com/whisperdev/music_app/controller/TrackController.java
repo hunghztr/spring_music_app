@@ -90,7 +90,7 @@ public class TrackController {
     }
 
     @PostMapping("/top")
-    public ResponseEntity<?> getTopByCategory(@RequestBody TrackRequest request) {
+    public ResponseEntity<?> getTopByCategory(@RequestBody TrackRequest request) throws InvalidException {
         List<Track> tracks = this.trackService.getAllByLimitAndCategory(request.getLimit(),
                 request.getCategory());
         List<TrackResponse> trackResponses = tracks.stream()

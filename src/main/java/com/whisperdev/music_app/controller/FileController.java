@@ -56,4 +56,11 @@ public class FileController {
         stringResult.setResult(result);
         return ResponseEntity.ok().body(stringResult);
     }
+    @PostMapping("files/upload-avatar")
+    public ResponseEntity<?> uploadFileAvatar(@RequestParam("fileUpload") MultipartFile file) {
+        String result = fileService.saveFile(file,"/avatar");
+        StringResult stringResult = new StringResult();
+        stringResult.setResult(result);
+        return ResponseEntity.ok().body(stringResult);
+    }
 }

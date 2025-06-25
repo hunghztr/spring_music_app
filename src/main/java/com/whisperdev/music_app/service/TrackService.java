@@ -16,6 +16,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,8 +26,11 @@ public class TrackService {
     @Autowired private TrackRepository trackRepository;
     @Autowired private UserRepository userRepository;
     public List<Track> getAllByLimitAndCategory(int limit,String category) {
+
+        Instant sevenDaysAgo = Instant.now().minus(7, ChronoUnit.DAYS); // ngày 7 ngày trước
+
         Pageable pageable = PageRequest.of(0,limit, Sort.by("countPlay").descending());
-        return trackRepository.findAllByCategory(category,pageable).getContent();
+        return trackRepository.findAllByCategoryAndCreatedAtAfter(category,sevenDaysAgo,pageable).getContent();
     }
     public List<Track> getAllByPage(Integer current,Integer pageSize){
         Pageable pageable = PageRequest.of(current-1,pageSize);

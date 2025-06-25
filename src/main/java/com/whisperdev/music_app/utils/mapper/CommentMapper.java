@@ -14,7 +14,7 @@ public class CommentMapper {
         commentResponse.setCreatedAt(comment.getCreatedAt());
         commentResponse.setUpdatedAt(comment.getUpdatedAt());
         commentResponse.setDeleted(comment.isDeleted());
-        UserResponse user = UserMapper.toUserResponse(comment.getUser());
+        UserResponse user = UserMapper.toUserResponse(comment.getUser(),"");
         TrackResponse track = TrackMapper.toTrackResponse(comment.getTrack());
         commentResponse.setUser(user);
         commentResponse.setTrack(track);

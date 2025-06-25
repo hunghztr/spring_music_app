@@ -1,7 +1,10 @@
 package com.whisperdev.music_app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Entity
 @Table(name = "permissions")
@@ -13,7 +16,9 @@ public class Permission {
     private String name;
     private String method;
     private String path;
-
+    @JsonIgnore
+    @ManyToMany(mappedBy = "permissions")
+    private List<Role> roles;
     public Permission() {
     }
 

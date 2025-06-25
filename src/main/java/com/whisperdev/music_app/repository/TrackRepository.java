@@ -8,9 +8,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
+
 @Repository
 public interface TrackRepository extends JpaRepository<Track, String>, JpaSpecificationExecutor<Track> {
-    Page<Track> findAllByCategory(String category,Pageable pageable);
+    Page<Track> findAllByCategoryAndCreatedAtAfter(String category, Instant fromDate, Pageable pageable);
     void deleteById(String id);
     Page<Track> findByUser(User user, Pageable pageable);
     Page<Track> findByTitleContainingIgnoreCaseOrCategoryContainingIgnoreCase(String title, String category, Pageable pageable);

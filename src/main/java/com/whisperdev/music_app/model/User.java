@@ -2,6 +2,7 @@ package com.whisperdev.music_app.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 import java.time.Instant;
@@ -20,7 +21,9 @@ public class User {
     private int age;
     private String gender;
     private String address;
-    private String role;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id")
+    private Role role;
     private String type;
     private boolean isVerify;
     @Column(columnDefinition = "TEXT")

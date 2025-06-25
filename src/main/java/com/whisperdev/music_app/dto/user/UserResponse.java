@@ -12,5 +12,7 @@ public class UserResponse {
     private String type;
     private String avatar;
     private boolean isVerify;
-
+    private String gender;
+    private int age;
+    private String address;
 }

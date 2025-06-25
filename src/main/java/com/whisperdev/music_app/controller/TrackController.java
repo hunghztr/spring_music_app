@@ -7,6 +7,7 @@ import com.whisperdev.music_app.model.Track;
 import com.whisperdev.music_app.model.User;
 import com.whisperdev.music_app.service.FileService;
 import com.whisperdev.music_app.service.TrackService;
+import com.whisperdev.music_app.utils.exception.InvalidException;
 import com.whisperdev.music_app.utils.mapper.TrackMapper;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,10 +64,13 @@ public class TrackController {
     }
     @GetMapping
     public ResponseEntity<?> getAllTracks(@RequestParam(name = "current",defaultValue = "1") Integer current
-    ,@RequestParam(name = "pageSize",defaultValue = "10") Integer pageSize) {
+    ,@RequestParam(name = "pageSize",defaultValue = "10") Integer pageSize) throws InvalidException {
         List<Track> tracks = trackService.getAllByPage(current,pageSize);
         List<TrackResponse> trackResponses = tracks.stream()
                 .map(i -> TrackMapper.toTrackResponse(i)).toList();
+        if(trackResponses.size() == 0){
+            throw new InvalidException("Không có bài hát nào");
+        }
         return ResponseEntity.ok(trackResponses);
     }
 

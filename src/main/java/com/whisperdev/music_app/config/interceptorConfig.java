@@ -17,6 +17,7 @@ public class interceptorConfig implements WebMvcConfigurer {
             "/api/v1/comments/get-by-track", "/api/v1/playlists",
             "/api/v1/auth/social-media","/api/v1/auth/refresh","/api/v1/files/upload-avatar",
             "/api/v1/images/avatar/{name}","/api/v1/images/{name}","/api/v1/tracks/{name}"};
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(getPermissionInterceptor())

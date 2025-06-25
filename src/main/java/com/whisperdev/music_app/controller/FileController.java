@@ -1,7 +1,9 @@
 package com.whisperdev.music_app.controller;
 
 import com.whisperdev.music_app.dto.StringResult;
+import com.whisperdev.music_app.service.CloudinaryService;
 import com.whisperdev.music_app.service.FileService;
+import com.whisperdev.music_app.utils.exception.InvalidException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -43,24 +45,30 @@ public class FileController {
                 .body(resourceOpt.get());
     }
     @PostMapping("files/upload-mp3")
-    public ResponseEntity<?> uploadFile(@RequestParam("fileUpload") MultipartFile file) {
+    public ResponseEntity<?> uploadFile(@RequestParam("fileUpload") MultipartFile file) throws InvalidException {
         String result = fileService.saveFile(file,"/mp3");
         StringResult stringResult = new StringResult();
-        stringResult.setResult(result);
+        int index = result.indexOf("/video");
+        String sub = result.substring(index);
+        stringResult.setResult(sub);
         return ResponseEntity.ok().body(stringResult);
     }
     @PostMapping("files/upload-img")
-    public ResponseEntity<?> uploadFileImg(@RequestParam("fileUpload") MultipartFile file) {
+    public ResponseEntity<?> uploadFileImg(@RequestParam("fileUpload") MultipartFile file) throws InvalidException {
         String result = fileService.saveFile(file,"/img");
         StringResult stringResult = new StringResult();
-        stringResult.setResult(result);
+        int index = result.indexOf("/image");
+        String sub = result.substring(index);
+        stringResult.setResult(sub);
         return ResponseEntity.ok().body(stringResult);
     }
     @PostMapping("files/upload-avatar")
-    public ResponseEntity<?> uploadFileAvatar(@RequestParam("fileUpload") MultipartFile file) {
+    public ResponseEntity<?> uploadFileAvatar(@RequestParam("fileUpload") MultipartFile file) throws InvalidException {
         String result = fileService.saveFile(file,"/avatar");
+        int index = result.indexOf("/image");
+        String sub = result.substring(index);
         StringResult stringResult = new StringResult();
-        stringResult.setResult(result);
+        stringResult.setResult(sub);
         return ResponseEntity.ok().body(stringResult);
     }
 }
